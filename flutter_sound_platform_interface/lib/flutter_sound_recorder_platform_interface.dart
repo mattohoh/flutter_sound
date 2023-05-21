@@ -61,6 +61,7 @@ enum AudioSource {
 abstract class FlutterSoundRecorderCallback
 {
   void updateRecorderProgress({int? duration, double? dbPeakLevel});
+  void updateRecorderPitch(Pitch pitch, int duration);
   void recordingData({Uint8List? data} );
   void startRecorderCompleted(int? state, bool? success);
   void pauseRecorderCompleted(int? state, bool? success);

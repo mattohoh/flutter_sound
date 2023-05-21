@@ -92,3 +92,12 @@ enum Codec {
   vorbisWebM,
 }
 
+class Pitch {
+  final String note;
+  final double frequency;
+  final double percentage;
+  final double cents;
+  final double db;
+
+  const Pitch(this.note, this.frequency, this.percentage, this.cents, this.db);
+}

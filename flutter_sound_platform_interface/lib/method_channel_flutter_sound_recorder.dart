@@ -62,6 +62,12 @@ Future<dynamic>? channelMethodCallHandler(MethodCall call) {
           aRecorder!.updateRecorderProgress(duration:call.arguments ['duration'], dbPeakLevel: call.arguments['dbPeakLevel']);
         }
         break;
+      case "updateRecorderPitch":
+        {
+          var pitch = Pitch(call.arguments['note'], call.arguments['frequency'], call.arguments['percentage'], call.arguments['cents'], call.arguments['db']);
+          aRecorder!.updateRecorderPitch(pitch, call.arguments ['duration']);
+        }
+        break;
 
         case "recordingData":
         {

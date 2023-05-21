@@ -31,7 +31,7 @@
 
 #import "FlutterSoundRecorder.h"
 #import <flutter_sound_core/FlautoRecorder.h>
-
+#import <flutter_sound_core/flutter_sound_core-Swift.h>
 
 @implementation FlutterSoundRecorder
 {
@@ -45,7 +45,20 @@
         NSDictionary* dico = @{ @"slotNo": [NSNumber numberWithInt: slotNo], @"status": [NSNumber numberWithInt: -1], @"dbPeakLevel": normalizedPeakLevel, @"duration": duration};
         [self invokeMethod:@"updateRecorderProgress" dico: dico ];
 }
- 
+
+- (void)updateRecorderPitch: (Pitch*) note duration:(NSNumber*) duration
+{
+        NSDictionary* dico = @{ @"slotNo": [NSNumber numberWithInt: slotNo], @"status": [NSNumber numberWithInt: -1],
+                                @"note": note.note,
+                                @"frequency": @(note.frequency),
+                                @"percentage": @(note.percentage),
+                                @"cents": @(note.cents),
+                                @"db":@(note.db),
+                                @"duration": duration,
+        };
+        [self invokeMethod:@"updateRecorderPitch" dico: dico ];
+}
+
 - (void)recordingData: (NSData*)data
 {
         NSDictionary* dico = @{ @"slotNo": [NSNumber numberWithInt: slotNo],  @"status": [NSNumber numberWithInt: -1], @"recordingData": data};

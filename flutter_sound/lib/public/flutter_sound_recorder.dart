@@ -31,6 +31,13 @@ import 'package:synchronized/synchronized.dart';
 
 import '../flutter_sound.dart';
 
+class PitchStreamData {
+  final Pitch pitch;
+  final int duration;
+
+  PitchStreamData(this.pitch, this.duration);
+}
+
 /// A Recorder is an object that can playback from various sources.
 ///
 /// ----------------------------------------------------------------------------------------------------
@@ -94,6 +101,7 @@ class FlutterSoundRecorder implements FlutterSoundRecorderCallback {
 
   RecorderState _recorderState = RecorderState.isStopped;
   StreamController<RecordingDisposition>? _recorderController;
+  StreamController<PitchStreamData>? _pitchStreamController;
 
   /// A reference to the User Sink during `StartRecorder(toStream:...)`
   StreamSink<Food>? _userStreamSink;
@@ -123,6 +131,9 @@ class FlutterSoundRecorder implements FlutterSoundRecorderCallback {
   /// ```
   Stream<RecordingDisposition>? get onProgress =>
       (_recorderController != null) ? _recorderController!.stream : null;
+
+  Stream<PitchStreamData>? get onPitchDetected =>
+      (_pitchStreamController != null) ? _pitchStreamController!.stream : null;
 
   /// True if `recorderState.isRecording`
   bool get isRecording => (_recorderState == RecorderState.isRecording);
@@ -162,6 +173,11 @@ class FlutterSoundRecorder implements FlutterSoundRecorderCallback {
       Duration(milliseconds: duration!),
       dbPeakLevel,
     ));
+  }
+
+  @override
+  void updateRecorderPitch(Pitch pitch, int duration) {
+    _pitchStreamController!.add(PitchStreamData(pitch, duration));
   }
 
   /// Callback from the &tau; Core. Must not be called by the App
@@ -500,11 +516,14 @@ class FlutterSoundRecorder implements FlutterSoundRecorderCallback {
 
   void _setRecorderCallback() {
     _recorderController ??= StreamController.broadcast();
+    _pitchStreamController ??= StreamController.broadcast();
   }
 
   void _removeRecorderCallback() {
     _recorderController?.close();
     _recorderController = null;
+    _pitchStreamController?.close();
+    _pitchStreamController = null;
   }
 
   /// Sets the frequency at which duration updates are sent to

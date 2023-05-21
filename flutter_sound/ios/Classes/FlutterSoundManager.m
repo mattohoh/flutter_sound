@@ -116,7 +116,7 @@
 {
         NSNumber* nlevel = [NSNumber numberWithInt: level];
     
-        NSDictionary* dico = @{ @"slotNo": [NSNumber numberWithInt: self ->slotNo], @"state": [NSNumber numberWithInt: -1], @"level": nlevel, @"msg": msg };
+        NSDictionary* dico = @{ @"slotNo": [NSNumber numberWithInt: self ->slotNo], @"state": [NSNumber numberWithInt: -1], @"logLevel": nlevel, @"msg": msg };
         [self invokeMethod: @"log" dico: dico  ];
 }
 
